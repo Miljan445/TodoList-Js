@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<title>To do list</title>
+</head>
+<body>
+	
+		<div class="list">
+			<h1>To do list</h1>
+			<h3>Enter a chore</h3>
+			<input type="text" name="chore" placeholder="chore..">
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</div>
+	
+	
+	<div class="output">
+		<ul class="choreList">
+		</ul>
+	</div>
+
+<style type="text/css">
+	.list{
+		background-color: #333;
+		color: white;
+		text-align: center;
+		padding-top:20px;
+		padding-bottom: 20px;
+	}
+	.btn{
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		
+	}
+	input{
+		color: #333;
+		margin-bottom: 20px
+	}
+	
+	
+
+</style>
+		
+<script type="text/javascript">
+		class Chore {
+			constructor(chore){
+				this.chore = chore;
+			}
+		}
+		class Ui{
+			static addChore(parametar){
+				document.getElementsByTagName("input")[0].value = "";
+				
+				ulList.innerHTML+=
+				`<li class="dddd list-group-item">${parametar.chore} <button class="btn-danger pull-right">X</button></li>`
+
+			}
+			static removeChore(parametar){
+				parametar.parentElement.remove();
+			}
+			static error(message,clas){
+				let div = document.createElement("div");
+				let list = document.querySelector(".list");
+				list.appendChild(div);
+				div.innerHTML = 
+				`${message}`;
+				div.className = "alert-" + clas;
+				div.style.marginTop = "20px";
+				div.style.padding = "30px";
+				setTimeout(()=>{
+					div.style.display = "none";
+				},3000)
+			}
+			
+		}
+let btn = document.querySelector(".btn-primary");
+let ulList = document.querySelector(".choreList");
+let list = document.querySelector(".list");
+let dd = document.getElementsByClassName("dd");
+btn.addEventListener("click",start);
+function start(e){
+	let input = document.getElementsByTagName('input')[0].value;
+	if(input === ""){
+		Ui.error("Please fill out the field above!","danger")
+	}else{
+		let parametar = new Chore(input);
+		Ui.addChore(parametar);
+	Ui.error("Chore added successfully!","success")
+//POCETAK SKLADISTA	
+localStorage.setItem(parametar.chore,parametar.chore);
+}
+}
+ulList.addEventListener("click",(e)=>{
+	if(e.target.innerHTML === "X"){
+		let parametar = e.target;
+		Ui.removeChore(parametar);
+		let forRemove = e.target.previousElementSibling.textContent;
+		localStorage.removeItem(forRemove);
+Ui.error("Chore removed successfully!","info")
+			}
+})
+function getStorage(){
+	for(var i = 0;i<localStorage.length;i++){
+	let keys = Object.keys(localStorage)
+	let keyValue = keys[i];
+ulList.innerHTML +=	`<li class="dddd list-group-item"><span>${keyValue}</span> <button class="btn-danger pull-right">X</button></li>`	
+}
+}
+getStorage();
+</script>
+</body>
+</html>
